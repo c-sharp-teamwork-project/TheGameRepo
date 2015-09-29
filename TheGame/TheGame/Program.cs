@@ -11,24 +11,28 @@ class TryPrintingBattleshipsMatirx
         public string direction;
 
     }
-    static void Main(string[] args)
+    static void Main()
     {
         //Console.SetBufferSize(0, 0);
         //Console.WindowHeight = 30;
         //Console.WindowWidth = 60;
 
-        bool[,] humanBoard = new bool[5, 5];
+        bool[,] humanBoard = new bool[10, 10];
         int[] shipSizes = { 2, 3, 3, 4, 5 };
         List<Ship> allTheShips = new List<Ship>();
         string[] shipNames = { "Destroyer", "Cruiser","Submarine", "BattleShip", "Aircraft Carrier"};
         for (int i = 0; i < shipSizes.Length; i++)
         {
+            Console.WriteLine("Current board: ");
+            Console.WriteLine();
+            PrintMatrix(humanBoard);
+            Console.WriteLine();
             Console.WriteLine("Ship Name: {0}, Size: {1}", shipNames[i], shipSizes[i]);
             Ship cruiser = new Ship();
             Console.Write("Enter the ship's row: ");
-            cruiser.shipRow = int.Parse(Console.ReadLine());
+            cruiser.shipRow = int.Parse(Console.ReadLine()) - 1;
             Console.Write("Enter the ship's col: ");
-            cruiser.shipCol = int.Parse(Console.ReadLine());
+            cruiser.shipCol = int.Parse(Console.ReadLine()) - 1;
             
             cruiser.shipLength = shipSizes[i];
 
@@ -42,9 +46,9 @@ class TryPrintingBattleshipsMatirx
                 Console.WriteLine("Ship Name: {0}, Size: {1}", shipNames[i], shipSizes[i]);
                 cruiser = new Ship();
                 Console.Write("Enter the ship's row: ");
-                cruiser.shipRow = int.Parse(Console.ReadLine());
+                cruiser.shipRow = int.Parse(Console.ReadLine()) - 1;
                 Console.Write("Enter the ship's col: ");
-                cruiser.shipCol = int.Parse(Console.ReadLine());
+                cruiser.shipCol = int.Parse(Console.ReadLine()) - 1;
 
                 cruiser.shipLength = shipSizes[i];
 
@@ -53,6 +57,11 @@ class TryPrintingBattleshipsMatirx
 
             }
             DrawShip(true, cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, humanBoard);
+            Console.WriteLine();
+            Console.WriteLine("Board after input: ");
+            PrintMatrix(humanBoard);
+            Console.WriteLine("To continue press Enter: ");
+            Console.ReadLine();
             Console.Clear();
         }
 
@@ -67,8 +76,22 @@ class TryPrintingBattleshipsMatirx
     }
     static void PrintMatrix(bool[,] matrix)
     {
+
+        Console.Write(" ".PadLeft(6));
+        for (int i = 0; i < 10; i++)
+        {
+            Console.Write((i + 1 + " ").PadLeft(5));
+        }
+        Console.WriteLine();
+        Console.Write(" ".PadLeft(7));
+        for (int i = 0; i < 10; i++)
+        {
+            Console.Write(("--- ").PadLeft(5));
+        }
+        Console.WriteLine();
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
+            Console.Write((i + 1 + "| ").PadLeft(5));
             for (int j = 0; j < matrix.GetLength(1); j++)
             {
                 if (matrix[i, j])
@@ -82,6 +105,12 @@ class TryPrintingBattleshipsMatirx
             }
             Console.WriteLine();
         }
+        Console.Write(" ".PadLeft(7));
+        for (int i = 0; i < 10; i++)
+        {
+            Console.Write(("--- ").PadLeft(5));
+        }
+        Console.WriteLine();
     }
     static bool TryShipPosition(int shipX, int shipY, int shipLength, string shipDirection, bool[,] matrix)
     {
