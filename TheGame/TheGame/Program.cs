@@ -8,7 +8,7 @@ class TryPrintingBattleshipsMatirx
         public int shipRow;
         public int shipCol;
         public int shipLength;
-        public char direction;
+        public string direction;
 
     }
     static void Main(string[] args)
@@ -25,29 +25,31 @@ class TryPrintingBattleshipsMatirx
         {
             Console.WriteLine("Ship Name: {0}, Size: {1}", shipNames[i], shipSizes[i]);
             Ship cruiser = new Ship();
-            Console.Write("Ship row: ");
+            Console.Write("Enter the ship's row: ");
             cruiser.shipRow = int.Parse(Console.ReadLine());
-            Console.Write("Ship col: ");
+            Console.Write("Enter the ship's col: ");
             cruiser.shipCol = int.Parse(Console.ReadLine());
             
             cruiser.shipLength = shipSizes[i];
-            
-            Console.Write("Ship's Direction: ");
-            cruiser.direction = char.Parse(Console.ReadLine());
+
+            Console.Write(@"Enter the ship's Direction (""Up"", ""Down"", ""Left"" or ""Right""): ");
+            cruiser.direction = Console.ReadLine();
 
             while (!TryShipPosition(cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, humanBoard))
             {
-                Console.WriteLine("Ship Number = {0}", i + 1);
+                Console.WriteLine();
+                Console.WriteLine("Invalid input! Please input again: ");
+                Console.WriteLine("Ship Name: {0}, Size: {1}", shipNames[i], shipSizes[i]);
                 cruiser = new Ship();
-                Console.Write("Ship row: ");
+                Console.Write("Enter the ship's row: ");
                 cruiser.shipRow = int.Parse(Console.ReadLine());
-                Console.Write("Ship col: ");
+                Console.Write("Enter the ship's col: ");
                 cruiser.shipCol = int.Parse(Console.ReadLine());
 
                 cruiser.shipLength = shipSizes[i];
-                
-                Console.Write("Ship's Direction: ");
-                cruiser.direction = char.Parse(Console.ReadLine());
+
+                Console.Write(@"Enter the ship's Direction (""Up"", ""Down"", ""Left"" or ""Right""): ");
+                cruiser.direction = Console.ReadLine();
 
             }
             DrawShip(true, cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, humanBoard);
@@ -81,7 +83,7 @@ class TryPrintingBattleshipsMatirx
             Console.WriteLine();
         }
     }
-    static bool TryShipPosition(int shipX, int shipY, int shipLength, char shipDirection, bool[,] matrix)
+    static bool TryShipPosition(int shipX, int shipY, int shipLength, string shipDirection, bool[,] matrix)
     {
         bool shipPlaced = true;
 
@@ -94,13 +96,13 @@ class TryPrintingBattleshipsMatirx
             }
             switch (shipDirection)
             {
-                case 'R':
+                case "Right":
                     shipY++; break;
-                case 'D':
+                case "Down":
                     shipX++; break;
-                case 'L':
+                case "Left":
                     shipY--; break;
-                case 'U':
+                case "Up":
                     shipX--; break;
                 default:
                     break;
@@ -109,7 +111,7 @@ class TryPrintingBattleshipsMatirx
 
         return shipPlaced;
     }
-    static void DrawShip(bool draw, int shipX, int shipY, int shipLength, char shipDirection, bool[,] matrix)
+    static void DrawShip(bool draw, int shipX, int shipY, int shipLength, string shipDirection, bool[,] matrix)
     {
         if (draw)
         {
@@ -118,13 +120,13 @@ class TryPrintingBattleshipsMatirx
                 matrix[shipX, shipY] = true;
                 switch (shipDirection)
                 {
-                    case 'R':
+                    case "Right":
                         shipY++; break;
-                    case 'D':
+                    case "Down":
                         shipX++; break;
-                    case 'L':
+                    case "Left":
                         shipY--; break;
-                    case 'U':
+                    case "Up":
                         shipX--; break;
                     default:
                         break;
