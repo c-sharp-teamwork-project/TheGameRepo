@@ -1,13 +1,62 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class TryPrintingBattleshipsMatirx
 {
+    struct Ship
+    {
+        public int shipRow;
+        public int shipCol;
+        public int shipLength;
+        public char direction;
+
+    }
     static void Main(string[] args)
     {
-        bool[,] matrix = new bool[10, 10];
+        //Console.SetBufferSize(0, 0);
+        //Console.WindowHeight = 30;
+        //Console.WindowWidth = 60;
 
-        DrawShip(TryShipPosition(0, 0, 3, 'R', matrix), 0, 0, 3, 'R', matrix);
-        PrintMatrix(matrix);
+        bool[,] humanBoard = new bool[5, 5];
+        int[] shipSizes = { 2, 3, 3, 4, 5 };
+        List<Ship> allTheShips = new List<Ship>();
+        string[] shipNames = { "Destroyer", "Cruiser","Submarine", "BattleShip", "Aircraft Carrier"};
+        for (int i = 0; i < shipSizes.Length; i++)
+        {
+            Console.WriteLine("Ship Name: {0}, Size: {1}", shipNames[i], shipSizes[i]);
+            Ship cruiser = new Ship();
+            Console.Write("Ship row: ");
+            cruiser.shipRow = int.Parse(Console.ReadLine());
+            Console.Write("Ship col: ");
+            cruiser.shipCol = int.Parse(Console.ReadLine());
+            
+            cruiser.shipLength = shipSizes[i];
+            
+            Console.Write("Ship's Direction: ");
+            cruiser.direction = char.Parse(Console.ReadLine());
+
+            while (!TryShipPosition(cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, humanBoard))
+            {
+                Console.WriteLine("Ship Number = {0}", i + 1);
+                cruiser = new Ship();
+                Console.Write("Ship row: ");
+                cruiser.shipRow = int.Parse(Console.ReadLine());
+                Console.Write("Ship col: ");
+                cruiser.shipCol = int.Parse(Console.ReadLine());
+
+                cruiser.shipLength = shipSizes[i];
+                
+                Console.Write("Ship's Direction: ");
+                cruiser.direction = char.Parse(Console.ReadLine());
+
+            }
+            DrawShip(true, cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, humanBoard);
+            Console.Clear();
+        }
+
+        PrintMatrix(humanBoard);
+        //DrawShip(true, cruiser.shipRow, cruiser.shipCol, cruiser.shipLength, cruiser.direction, matrix);
+       // PrintMatrix(matrix);
     }
 
     static void FillMatrix(bool[,] matrix)
