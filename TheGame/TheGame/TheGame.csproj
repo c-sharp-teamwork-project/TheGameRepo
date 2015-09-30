@@ -7,7 +7,7 @@
     <ProjectGuid>{2EE4F363-04FC-4D97-A85D-30D91A0962D0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TheGame</RootNamespace>
+    <RootNamespace>GameClasses</RootNamespace>
     <AssemblyName>TheGame</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Ship.cs" />
+    <Compile Include="TheGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
