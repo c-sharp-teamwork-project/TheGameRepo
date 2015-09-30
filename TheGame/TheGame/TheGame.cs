@@ -62,10 +62,11 @@ class TheGame
     static Battleship MakeShip(string rank, int size)
     {
         Console.WriteLine("Battleship Rank: {0}, Size: {1}", rank, size);
-        Console.Write("Input X: ");
-        int coordinatesX = int.Parse(Console.ReadLine());
-        Console.Write("Input Y: ");
-        int coordinatesY = int.Parse(Console.ReadLine());
+        Console.Write("Input row and col coordinates: ");
+        string[] coordinates = Console.ReadLine().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+        int coordinatesX = ConvertCoordinateToInt(coordinates[0]);
+        int coordinatesY = int.Parse(coordinates[1]) - 1;
         Console.Write("Input Direction: ");
         char direction = Convert.ToChar(Console.ReadLine());
 
@@ -73,10 +74,11 @@ class TheGame
         while (!validPosition)
         {
             Console.WriteLine("Invalid input.. Try again");
-            Console.Write("Input X: ");
-            coordinatesX = int.Parse(Console.ReadLine());
-            Console.Write("Input Y: ");
-            coordinatesY = int.Parse(Console.ReadLine());
+            Console.Write("Input row and col coordinates: ");
+            coordinates = Console.ReadLine().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+
+            coordinatesX = ConvertCoordinateToInt(coordinates[0]);
+            coordinatesY = int.Parse(coordinates[1]) - 1;
             Console.Write("Input Direction: ");
             direction = Convert.ToChar(Console.ReadLine());
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
@@ -125,7 +127,7 @@ class TheGame
         Console.WriteLine(playerName);
         //name printing
 
-        Console.WriteLine("    A B C D E F G H I J");
+        Console.WriteLine("    1 2 3 4 5 6 7 8 9 10");
         Console.WriteLine("    " + new string('-', (matrix.GetLength(0) * 2) - 1));
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
@@ -133,7 +135,7 @@ class TheGame
             {
                 if (j == 0)
                 {
-                    Console.Write("{0} |", i);
+                    Console.Write("{0} |", GetRowChar(i));
                 }
                 if (matrix[i, j] != 'O')
                 {
@@ -232,7 +234,7 @@ class TheGame
         //name printing
 
         Console.SetCursorPosition(30, 1);
-        Console.WriteLine("    A B C D E F G H I J");
+        Console.WriteLine("    1 2 3 4 5 6 7 8 9 10");
         Console.SetCursorPosition(30, 2);
         Console.WriteLine("    " + new string('-', (matrix.GetLength(0) * 2) - 1));
         for (int i = 0; i < matrix.GetLength(0); i++)
@@ -242,7 +244,7 @@ class TheGame
             {
                 if (j == 0)
                 {
-                    Console.Write("{0} |", i);
+                    Console.Write("{0} |", GetRowChar(i));
                 }
                 if (matrix[i, j] != 'O')
                 {
@@ -255,5 +257,87 @@ class TheGame
             }
             Console.WriteLine();
         }
+    }
+
+    static char GetRowChar(int i)
+    {
+        char toReturn = ' ';
+        switch (i)
+        {
+            case 0:
+                toReturn = 'A';
+                break;
+            case 1:
+                toReturn = 'B';
+                break;
+            case 2:
+                toReturn = 'C';
+                break;
+
+            case 3:
+                toReturn = 'D';
+                break;
+            case 4:
+                toReturn = 'E';
+                break;
+            case 5:
+                toReturn = 'F';
+                break;
+
+            case 6:
+                toReturn = 'G';
+                break;
+            case 7:
+                toReturn = 'H';
+                break;
+            case 8:
+                toReturn = 'I';
+                break;
+            case 9:
+                toReturn = 'J';
+                break;
+        }
+        return toReturn;
+    }
+
+    static int ConvertCoordinateToInt(string input) 
+    {
+        int row = 0;
+        switch (input)
+        {
+            case "A":
+                row = 0;
+                break;
+            case "B":
+                row = 1;
+                break;
+            case "C":
+                row = 2;
+                break;
+            case "D":
+                row = 3;
+                break;
+            case "E":
+                row = 4;
+                break;
+            case "F":
+                row = 5;
+                break;
+            case "G":
+                row = 6;
+                break;
+            case "H":
+                row = 7;
+                break;
+            case "I":
+                row = 8;
+                break;
+            case "J":
+                row = 9;
+                break;
+            default:
+                break;
+        }
+        return row;
     }
 }
