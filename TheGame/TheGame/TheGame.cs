@@ -26,25 +26,31 @@ class TheGame
 
         humanBoard = player.board;
         aiBoard = ai.Board;
-        PrintMatrix(player.Board);
+        PrintMatrix(player.Board, player.name);
         
-        PrintAIMatrix(player.Board);
+        PrintAIMatrix(player.Board, ai.name);
 
         string[] shipRanks = { "Scout" ,"Submarine", "Destroyer", "BattleShip", "Aircraft Carrier"};
 
+        // create a separate list for The AI
+
+        //for (int i = 0; i < 5; i++)
+        //{
+        //    ships.Add(MakeShip(shipRanks[i], shipSizes[i]));
+        //}
+
         for (int i = 0; i < 5; i++)
         {
-            ships.Add(MakeShipAI(shipRanks[i], shipSizes[i]));
-        }
 
-        for (int i = 0; i < 2; i++)
-        {
-            Console.SetCursorPosition(0,14);
+            Console.SetCursorPosition(1, 14);
             ships.Add(MakeShip(shipRanks[i], shipSizes[i]));
             DrawShip(ships[i]);
+            
+        
             Console.Clear();
-            PrintMatrix(player.Board);
-            PrintAIMatrix(player.Board);
+            
+            PrintMatrix(player.Board, player.name);
+            PrintAIMatrix(player.Board, ai.name);
         }
         
         //player.Board = humanBoard;
@@ -111,8 +117,13 @@ class TheGame
         Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
         return ship;
     }
-    static void PrintMatrix(char[,] matrix)
+    static void PrintMatrix(char[,] matrix, string playerName)
     {
+        //name printing
+        Console.SetCursorPosition(26 / 2 - playerName.Length / 2, 0);
+        Console.WriteLine(playerName);
+        //name printing
+
         Console.WriteLine("    A B C D E F G H I J");
         Console.WriteLine("    " + new string('-', (matrix.GetLength(0) * 2) - 1));
         for (int i = 0; i < matrix.GetLength(0); i++)
@@ -172,8 +183,13 @@ class TheGame
             }
         }
     }
-    static void PrintAIMatrix(char[,] matrix)
+    static void PrintAIMatrix(char[,] matrix, string aiName)
     {
+        //name printing
+        Console.SetCursorPosition(40, 0);
+        Console.WriteLine(aiName);
+        //name printing
+
         Console.SetCursorPosition(30, 1);
         Console.WriteLine("    A B C D E F G H I J");
         Console.SetCursorPosition(30, 2);
