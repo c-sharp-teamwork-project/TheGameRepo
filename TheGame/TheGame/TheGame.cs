@@ -9,31 +9,42 @@ class TheGame
 
     static void Main()
     {
-        // Console.SetBufferSize(0, 0);
-        // Console.WindowHeight = 30;
-        // Console.WindowWidth = 60;
+        Console.BufferHeight = Console.WindowHeight = 40;
+        Console.BufferWidth = Console.WindowWidth = 55;
 
-        Player player = new Player("Some Player");
+        //printing player/ai name
+        Player player = new Player("Playerrrrrrrrrrrrrrrrrrrrrr");
+        Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
+        Console.WriteLine(player.Name);
         Player ai = new Player("Easy Bot");
+        Console.SetCursorPosition(40, 0);
+        Console.WriteLine(ai.Name);
+        
 
         int[] shipSizes = { 2, 3, 3, 4, 5 };
         List<Battleship> ships = new List<Battleship>();
 
         humanBoard = player.board;
         aiBoard = ai.Board;
+        PrintMatrix(player.Board);
+        
+        PrintAIMatrix(player.Board);
 
         string[] shipRanks = { "Scout" ,"Submarine", "Destroyer", "BattleShip", "Aircraft Carrier"};
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 2; i++)
         {
+            Console.SetCursorPosition(0,14);
             ships.Add(MakeShip(shipRanks[i], shipSizes[i]));
             DrawShip(ships[i]);
             Console.Clear();
+            PrintMatrix(player.Board);
+            PrintAIMatrix(player.Board);
         }
+        
+        //player.Board = humanBoard;
 
-        player.Board = humanBoard;
-
-        PrintMatrix(player.Board);
+        
     }
 
     static Battleship MakeShip(string rank, int size)
@@ -59,7 +70,11 @@ class TheGame
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
         }
         Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
+
+       
+        
         return ship;
+        
     }
     static void PrintMatrix(char[,] matrix)
     {
@@ -120,6 +135,33 @@ class TheGame
                 case 'U': ship.x -= 1; break;
                 default: break;
             }
+        }
+    }
+    static void PrintAIMatrix(char[,] matrix)
+    {
+        Console.SetCursorPosition(30, 1);
+        Console.WriteLine("    A B C D E F G H I J");
+        Console.SetCursorPosition(30, 2);
+        Console.WriteLine("    " + new string('-', (matrix.GetLength(0) * 2) - 1));
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            Console.SetCursorPosition(30, i+3);
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                if (j == 0)
+                {
+                    Console.Write("{0} |", i);
+                }
+                if (matrix[i, j] != 'O')
+                {
+                    Console.Write("{0}".PadLeft(4), matrix[i, j]);
+                }
+                else
+                {
+                    Console.Write("{0}".PadLeft(4), ".");
+                }
+            }
+            Console.WriteLine();
         }
     }
 }
