@@ -4,6 +4,7 @@ namespace GameClasses
 {
     public class Battleship
     {
+       
         public string rank;
         public int x;
         public int y;
