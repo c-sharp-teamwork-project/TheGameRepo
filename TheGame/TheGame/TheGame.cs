@@ -24,9 +24,9 @@ class TheGame
 
         string[] shipRanks = { "Scout" ,"Submarine", "Destroyer", "BattleShip", "Aircraft Carrier"};
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 5; i++)
         {
-            ships.Add(MakeShip(shipRanks[i], shipSizes[i]));
+            ships.Add(MakeShipAI(shipRanks[i], shipSizes[i]));
             DrawShip(ships[i]);
             Console.Clear();
         }
@@ -56,6 +56,40 @@ class TheGame
             coordinatesY = int.Parse(Console.ReadLine());
             Console.Write("Input Direction: ");
             direction = Convert.ToChar(Console.ReadLine());
+            validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
+        }
+        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
+        return ship;
+    }
+    static Battleship MakeShipAI(string rank, int size)
+    {
+        Random rnd = new Random();
+        int coordinatesX = rnd.Next(0, 10);
+        int coordinatesY = rnd.Next(0, 10);
+        int intDirection = rnd.Next(1, 5);
+        char direction = ' ';
+        switch (intDirection)
+        {
+            case 1: direction = 'R'; break;
+            case 2: direction = 'D'; break;
+            case 3: direction = 'L'; break;
+            case 4: direction = 'U'; break;
+            default: break;
+        }
+        bool validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
+        while (!validPosition)
+        {
+            coordinatesX = rnd.Next(0, 10);
+            coordinatesY = rnd.Next(0, 10);
+            intDirection = rnd.Next(1, 5);
+            switch (intDirection)
+            {
+                case 1: direction = 'R'; break;
+                case 2: direction = 'D'; break;
+                case 3: direction = 'L'; break;
+                case 4: direction = 'U'; break;
+                default: break;
+            }
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
         }
         Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
