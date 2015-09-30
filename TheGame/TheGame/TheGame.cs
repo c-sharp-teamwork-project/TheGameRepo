@@ -13,7 +13,7 @@ class TheGame
         Console.BufferWidth = Console.WindowWidth = 55;
 
         //printing player/ai name
-        Player player = new Player("Playerrrrrrrrrrrrrrrrrrrrrr");
+        Player player = new Player("Playerrrrrrrrrr");
         Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
         Console.WriteLine(player.Name);
         Player ai = new Player("Easy Bot");
@@ -31,6 +31,11 @@ class TheGame
         PrintAIMatrix(player.Board);
 
         string[] shipRanks = { "Scout" ,"Submarine", "Destroyer", "BattleShip", "Aircraft Carrier"};
+
+        for (int i = 0; i < 5; i++)
+        {
+            ships.Add(MakeShipAI(shipRanks[i], shipSizes[i]));
+        }
 
         for (int i = 0; i < 2; i++)
         {
@@ -70,11 +75,41 @@ class TheGame
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
         }
         Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
-
-       
-        
         return ship;
-        
+    }
+    static Battleship MakeShipAI(string rank, int size)
+    {
+        Random rnd = new Random();
+        int coordinatesX = rnd.Next(0, 10);
+        int coordinatesY = rnd.Next(0, 10);
+        int intDirection = rnd.Next(1, 5);
+        char direction = ' ';
+        switch (intDirection)
+        {
+            case 1: direction = 'R'; break;
+            case 2: direction = 'D'; break;
+            case 3: direction = 'L'; break;
+            case 4: direction = 'U'; break;
+            default: break;
+        }
+        bool validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
+        while (!validPosition)
+        {
+            coordinatesX = rnd.Next(0, 10);
+            coordinatesY = rnd.Next(0, 10);
+            intDirection = rnd.Next(1, 5);
+            switch (intDirection)
+            {
+                case 1: direction = 'R'; break;
+                case 2: direction = 'D'; break;
+                case 3: direction = 'L'; break;
+                case 4: direction = 'U'; break;
+                default: break;
+            }
+            validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, humanBoard);
+        }
+        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
+        return ship;
     }
     static void PrintMatrix(char[,] matrix)
     {
