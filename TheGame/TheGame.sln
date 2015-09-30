@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheGame", "TheGame\TheGame.csproj", "{2EE4F363-04FC-4D97-A85D-30D91A0962D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reference", "reference\reference.csproj", "{CAB75F6B-F9F3-4899-B971-DF5B62CC6BF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2EE4F363-04FC-4D97-A85D-30D91A0962D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EE4F363-04FC-4D97-A85D-30D91A0962D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EE4F363-04FC-4D97-A85D-30D91A0962D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB75F6B-F9F3-4899-B971-DF5B62CC6BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB75F6B-F9F3-4899-B971-DF5B62CC6BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB75F6B-F9F3-4899-B971-DF5B62CC6BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB75F6B-F9F3-4899-B971-DF5B62CC6BF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
