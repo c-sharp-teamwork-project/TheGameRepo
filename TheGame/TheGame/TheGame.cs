@@ -9,7 +9,7 @@ class TheGame
 
     static void Main()
     {
-        Console.BufferHeight = Console.WindowHeight = 40;
+        Console.BufferHeight = Console.WindowHeight = 35;
         Console.BufferWidth = Console.WindowWidth = 55;
 
         //printing player/ai name
