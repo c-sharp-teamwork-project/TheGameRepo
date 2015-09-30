@@ -12,6 +12,7 @@ class TheGame
         Console.BufferHeight = Console.WindowHeight = 35;
         Console.BufferWidth = Console.WindowWidth = 55;
 
+        StartScreen();
         //printing player/ai name
         Player player = new Player("Playerrrrrrrrrr");
         Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
@@ -183,7 +184,47 @@ class TheGame
             }
         }
     }
+
+
+    static void StartScreen()
+    {
+        Console.WriteLine("The Amazing Battleships");
+        for (int i = 0; i < 10; i++)
+        {
+            Console.WriteLine();
+        }
+        Console.Write("Do you want to see the instuctions? (Y/N): ");
+    Here:
+        string agree = Console.ReadLine();
+        if (agree == "Y")
+        {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("Instuctions: ");
+            Console.WriteLine("1) In this game you will start by placing 5 ships on your board.");
+            Console.Write(@"2) When asked for coordinates you have to input a letter from ""A"" to ""J"" (this is the row coordinate), followed by a number from 1 to 10 (this is the col coordinate) on a single line.");
+            Console.WriteLine(@"3) When asked for a position you must enter ""L"" for ""Left"", ""R"" for ""Right"", ""U"" for ""Up"" or ""D"" for ""Down"".");
+            Console.WriteLine("4) When the game starts the AI and you will take turns on bombarding your ships.");
+            Console.WriteLine("5) The bombarding happens by inputting the coordinates that you want to bombard (the same as with placing the ships.");
+            Console.WriteLine("6) Whoever sinks all the ships first is the winner.");
+            Console.WriteLine();
+            Console.WriteLine("Press Enter to continue: ");
+            Console.ReadLine();
+            Console.Clear();
+        }
+        else if (agree == "N")
+        {
+            Console.Clear();
+        }
+        else
+        {
+            Console.WriteLine("Invalid input! Input again: ");
+            goto Here;
+        }
+    }
+
     static void PrintAIMatrix(char[,] matrix, string aiName)
+
     {
         //name printing
         Console.SetCursorPosition(40, 0);
