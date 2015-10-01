@@ -52,7 +52,7 @@ class TheGame
 
         // Test Shooting
         
-        string shoot = string.Empty;
+        string shooter = string.Empty;
         bool end = true;
 
         List<string> destroyedShips = new List<string>();
@@ -63,16 +63,32 @@ class TheGame
             
             Console.SetCursorPosition(0, 14);
             Console.WriteLine("Destroyed ships: ");
-            Console.WriteLine(string.Join(", ", destroyedShips));
+            Console.WriteLine(string.Join(", ", destroyedShips)); // printing the destroyed ships
             Console.WriteLine("Enter target cooridnates, admiral!");
             Console.Write("Target coordinates: ");
-            shoot = Console.ReadLine();
-            
-            if (CollisionCheck(aiShips, ai, shoot))
+            shooter = Console.ReadLine();
+            string[] shoot = shooter.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+            if (shoot.Length != 2)
+            {
+                Console.Write("Invalid input! Try again: ");
+                shooter = Console.ReadLine();
+            }
+            int rowShoot = ConvertCoordinateToInt(shoot[0].ToString());
+            int colShoot = int.Parse(shoot[1].ToString()) - 1;
+
+            while (player.Board[rowShoot, colShoot] == '$')
+            {
+                Console.WriteLine("Invalid input! Try again: ");
+                shooter = Console.ReadLine();
+                rowShoot = ConvertCoordinateToInt(shoot[0].ToString());
+                colShoot = int.Parse(shoot[1].ToString()) - 1;
+            }
+
+            if (CollisionCheck(aiShips, ai, rowShoot, colShoot))
             {
                 Console.Beep();
                 Console.WriteLine("Direct hit!");
-                foreach (var ship in aiShips)
+                foreach (var ship in aiShips) //Adding the destroyed ships to List
                 {
                     if (ship.health == 0)
                     {
@@ -94,6 +110,30 @@ class TheGame
             PrintMatrix(player.Board, player.name);
 
             PrintAIMatrix(ai.Board, ai.name);
+
+            Random rnd = new Random(); //getting the ai row and col to shoot
+            rowShoot = rnd.Next(0, 10);
+            colShoot = rnd.Next(0, 10);
+            while (ai.Board[rowShoot, colShoot] == '$')
+            {
+                rnd = new Random();
+                rowShoot = rnd.Next(0, 10);
+                colShoot = rnd.Next(0, 10);
+            }
+
+            if (CollisionCheck(playerShips, player, rowShoot, colShoot))
+            {
+                Console.Beep();
+                Console.WriteLine("Direct hit!");
+                
+                Thread.Sleep(1000);
+
+            }
+            else
+            {
+                Console.WriteLine("The AI missed!");
+                Thread.Sleep(1000);
+            }
             end = true;
             
             
@@ -263,27 +303,29 @@ class TheGame
         }
         return collision;
     }
-    static bool CollisionCheck(List<Battleship> shiplist, Player attackedPlayer, string shotCoordinates)
+    static bool CollisionCheck(List<Battleship> shiplist, Player player, int row, int col)
     {
         bool collision = false;
-        string[] coordinates = shotCoordinates.Split();
-        int row = ConvertCoordinateToInt(coordinates[0].ToString());
-        int col = int.Parse(coordinates[1])-1;
         
         for (int i = 0; i < shiplist.Count; i++)
         {
-            if (attackedPlayer.board[row,col] == shiplist[i].signature)
+            if (player.board[row, col] == shiplist[i].signature)
             {
                 collision =true;
                 shiplist[i].health--;
-                attackedPlayer.board[row, col] = 'X';
+                player.board[row, col] = 'X'; //Put X sign if hit
                 break;
+            }
+            else
+            {
+                player.board[row, col] = '$'; //Put $ sign of miss
             }
         }
         
         
         return collision;
     }
+
 
     static void StartScreen()
     {
