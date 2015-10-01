@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameClasses;
 using System.Threading;
+using System.IO;
 
 class TheGame
 {
@@ -13,19 +14,25 @@ class TheGame
         int[] shipSizes = { 2, 3, 3, 4, 5 };
         string[] shipRanks = { "Scout", "Submarine", "Destroyer", "BattleShip", "Aircraft Carrier" };
         char[] shipChar = { 'S', 'U', 'D', 'B', 'C' };
-        
+
+
+        StartScreen();
+
         List<Battleship> playerShips = new List<Battleship>();
         List<Battleship> aiShips = new List<Battleship>();
 
-        Player player = new Player("Playerrrrrrrrrr");
+        Console.Write("Please enter your name: ");
+        string playerName = Console.ReadLine();
+
+        Console.Clear();
+
+        Player player = new Player(playerName);
         Player ai = new Player("Easy Bot");
 
-       // StartScreen();
-        
         // Printing player/ai names
         //Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
         //Console.WriteLine(player.Name);
-        
+
         //Console.SetCursorPosition(40, 0);
         //Console.WriteLine(ai.Name);
 
@@ -33,14 +40,14 @@ class TheGame
         PrintAIMatrix(player.Board, ai.name);
 
         // Create a separate list for The AI
-        for (int i = 0; i < 5; i++) 
+        for (int i = 0; i < 5; i++)
         {
             aiShips.Add(MakeShipAI(shipRanks[i], shipSizes[i], ai, shipChar[i]));
             AddShipOnBoard(aiShips[i], ai);
         }
 
-         //Read player ships
-        for (int i = 0; i < 1; i++)
+        //Read player ships
+        for (int i = 0; i < 5; i++)
         {
             Console.SetCursorPosition(1, 14);
             playerShips.Add(PlaceShip(shipRanks[i], shipSizes[i], player, shipChar[i]));
@@ -51,7 +58,7 @@ class TheGame
         }
 
         // Test Shooting
-        
+
         string shooter = string.Empty;
         bool end = true;
 
@@ -61,37 +68,61 @@ class TheGame
         {
             aiShipsToRemove.Add(ship);
         }
+        List<Battleship> playerShipsToRemove = new List<Battleship>();
+        foreach (var ship in playerShips)
+        {
+            playerShipsToRemove.Add(ship);
+        }
+
+        string playerLastTurnOutcome = "";
+        string aiLastTurnOutcome = "";
 
         while (end)
         {
-            
-            
+
+            Console.SetCursorPosition(0, 13);
+            Console.WriteLine(playerLastTurnOutcome);
+            Console.SetCursorPosition(30, 13);
+            Console.WriteLine(aiLastTurnOutcome);
             Console.SetCursorPosition(0, 14);
             Console.WriteLine("Destroyed ships: ");
             Console.WriteLine(string.Join(", ", destroyedShips)); // printing the destroyed ships
 
+            //string winner = "YOU WIN";
             if (aiShipsToRemove.Count == 0)
             {
-                Console.WriteLine("YOU WIN");
+                Console.Clear();
+                PrintMatrix(player.Board, player.name);
+                PrintAIMatrix(ai.Board, ai.name);
+                string winner = "YOU WIN";
+                Console.WriteLine(new string(' ', (55 / 2) - (winner.Length / 2)) + winner);
+                break;
+            }
+            if (playerShipsToRemove.Count == 0)
+            {
+                Console.Clear();
+                PrintMatrix(player.Board, player.name);
+                PrintAIMatrix(ai.Board, ai.name);
+                string loser = "YOU LOSE";
+                Console.WriteLine(new string(' ', (55 / 2) - (loser.Length / 2)) + loser);
                 break;
             }
 
-            Console.WriteLine("Enter target cooridnates, admiral!");
+            Console.WriteLine("Enter target coordinates, admiral!");
             Console.Write("Target coordinates: ");
             shooter = Console.ReadLine();
             string[] shoot = shooter.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-            if (shoot.Length != 2)
-            {
-                Console.Write("Invalid input! Try again: ");
-                shooter = Console.ReadLine();
-            }
+
+
             int rowShoot = ConvertCoordinateToInt(shoot[0].ToString());
             int colShoot = int.Parse(shoot[1].ToString()) - 1;
 
-            while (player.Board[rowShoot, colShoot] == '$')
+            while (player.Board[rowShoot, colShoot] == '$' && player.Board[rowShoot, colShoot] == 'X')
             {
-                Console.WriteLine("Invalid input! Try again: ");
+                Console.WriteLine("Invalid input! Try again. ");
+                Console.Write("Target coordinates: ");
                 shooter = Console.ReadLine();
+                shoot = shooter.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
                 rowShoot = ConvertCoordinateToInt(shoot[0].ToString());
                 colShoot = int.Parse(shoot[1].ToString()) - 1;
             }
@@ -99,7 +130,7 @@ class TheGame
             if (CollisionCheck(aiShips, ai, rowShoot, colShoot))
             {
                 Console.Beep();
-                Console.WriteLine("Direct hit!");
+                playerLastTurnOutcome = "Direct hit! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
                 foreach (var ship in aiShips) //Adding the destroyed ships to List
                 {
                     if (ship.health == 0)
@@ -112,11 +143,11 @@ class TheGame
                     }
                 }
                 Thread.Sleep(1000);
-                
+
             }
             else
             {
-                Console.WriteLine("We didn't get them this time!");
+                playerLastTurnOutcome = "We didn't get them this time! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
                 Thread.Sleep(1000);
             }
 
@@ -137,21 +168,27 @@ class TheGame
 
             if (CollisionCheck(playerShips, player, rowShoot, colShoot))
             {
-                Console.Beep();
-                Console.WriteLine("Direct hit!");
-                
+                Console.Beep(); ;
+                aiLastTurnOutcome = "Direct hit! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
+
                 Thread.Sleep(1000);
 
             }
             else
             {
-                Console.WriteLine("The AI missed!");
+                aiLastTurnOutcome = "The AI missed! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
                 Thread.Sleep(1000);
             }
+
+            Console.Clear();
+            PrintMatrix(player.Board, player.name);
+
+            PrintAIMatrix(ai.Board, ai.name);
+
             end = true;
-            
-            
-            
+
+
+
         }
         Console.WriteLine("Press Enter to quit.");
     }
@@ -167,10 +204,11 @@ class TheGame
         Console.Write("Input Direction: ");
         char direction = Convert.ToChar(Console.ReadLine());
 
+
         bool validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, player);
         while (!validPosition)
         {
-            Console.WriteLine("Invalid input.. Try again");
+            Console.WriteLine("Invalid input! Try again");
             Console.Write("Input row and col coordinates: ");
             coordinates = Console.ReadLine().Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
 
@@ -185,7 +223,7 @@ class TheGame
     }
     static Battleship MakeShipAI(string rank, int size, Player player, char sign)
     {
-        
+
         Random rnd = new Random();
         int coordinatesX = rnd.Next(0, 10);
         int coordinatesY = rnd.Next(0, 10);
@@ -276,109 +314,63 @@ class TheGame
             player.board[ship.CurrentX, ship.CurrentY] = ship.signature;
             switch (ship.Direction)
             {
-                case 'R': ship.y ++; break;
-                case 'D': ship.x ++; break;
-                case 'L': ship.y --; break;
-                case 'U': ship.x --; break;
+                case 'R': ship.y++; break;
+                case 'D': ship.x++; break;
+                case 'L': ship.y--; break;
+                case 'U': ship.x--; break;
                 default: break;
             }
         }
     }
-    static bool CheckForCollision(List<Battleship> shipList, Player attackedPlayer, string coordinates) 
-    {
-        // Check if the attacked player has a ship that will be hit
-        bool collision = false;
 
-        for (int i = 0; i < shipList.Count; i++) // Checking all ships from the list one by one
-        {
-            int shipX = shipList[i].CurrentX;
-            int shipY = shipList[i].CurrentY;
-            string name = shipList[i].rank;
-            int fireX = ConvertCoordinateToInt(coordinates[0].ToString());
-                int fireY = int.Parse(coordinates[2].ToString()) - 1;
-
-            for (int square = 0; square < shipList[i].Size; square++) // Check every square the ship occupies one by one 
-            {
-                if (fireX == shipX && fireY == shipY) // Check if the input coordinates are on target   
-                {
-                    collision = true;
-                }
-                if (square != shipList[i].Size - 1) // If there are still squares left from the ship
-                {
-                    switch (shipList[i].Direction) // Get coordinates of the next square
-                    {
-                        case 'R': shipY++; break;
-                        case 'D': shipX++; break;
-                        case 'L': shipY--; break;
-                        case 'U': shipX--; break;
-                        default: break;
-                    }
-                }
-            }
-        }
-        return collision;
-    }
     static bool CollisionCheck(List<Battleship> shiplist, Player player, int row, int col)
     {
         bool collision = false;
-        
+
         for (int i = 0; i < shiplist.Count; i++)
         {
             if (player.board[row, col] == shiplist[i].signature)
             {
-                collision =true;
+                collision = true;
                 shiplist[i].health--;
                 player.board[row, col] = 'X'; //Put X sign if hit
                 break;
             }
+            if (i == shiplist.Count - 1 && player.board[row, col] != shiplist[i].signature)
+            {
+                player.board[row, col] = '$'; //Put $ sign of miss
+            }
 
         }
-        player.board[row, col] = '$'; //Put $ sign of miss
-        
-        
+
         return collision;
     }
 
 
     static void StartScreen()
     {
+        string gameName = "The Amazing Battleships";
+        Console.SetCursorPosition((55 / 2) - (gameName.Length / 2), 0);
+
         Console.WriteLine("The Amazing Battleships");
-        for (int i = 0; i < 10; i++)
+
+        StreamReader reader = new StreamReader("../../Instuctions.txt");
+
+        using (reader)
         {
-            Console.WriteLine();
+            string line = reader.ReadLine();
+            while (line != null)
+            {
+                Console.WriteLine(line);
+                line = reader.ReadLine();
+            }
         }
-        Console.Write("Do you want to see the instuctions? (Y/N): ");
-    Here:
-        string agree = Console.ReadLine();
-        if (agree == "Y")
-        {
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine("Instuctions: ");
-            Console.WriteLine("1) In this game you will start by placing 5 ships on your board.");
-            Console.Write(@"2) When asked for coordinates you have to input a letter from ""A"" to ""J"" (this is the row coordinate), followed by a number from 1 to 10 (this is the col coordinate) on a single line.");
-            Console.WriteLine(@"3) When asked for a position you must enter ""L"" for ""Left"", ""R"" for ""Right"", ""U"" for ""Up"" or ""D"" for ""Down"".");
-            Console.WriteLine("4) When the game starts the AI and you will take turns on bombarding your ships.");
-            Console.WriteLine("5) The bombarding happens by inputting the coordinates that you want to bombard (the same as with placing the ships.");
-            Console.WriteLine("6) Whoever sinks all the ships first is the winner.");
-            Console.WriteLine();
-            Console.WriteLine("Press Enter to continue: ");
-            Console.ReadLine();
-            Console.Clear();
-        }
-        else if (agree == "N")
-        {
-            Console.Clear();
-        }
-        else
-        {
-            Console.WriteLine("Invalid input! Input again: ");
-            goto Here;
-        }
+        Console.ReadLine();
+        Console.Clear();
+
     }
 
     static void PrintAIMatrix(char[,] matrix, string aiName)
-
     {
         //name printing
         Console.SetCursorPosition(40, 0);
@@ -391,7 +383,7 @@ class TheGame
         Console.WriteLine("    " + new string('-', (matrix.GetLength(0) * 2) - 1));
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
-            Console.SetCursorPosition(30, i+3);
+            Console.SetCursorPosition(30, i + 3);
             for (int j = 0; j < matrix.GetLength(1); j++)
             {
                 if (j == 0)
@@ -452,14 +444,14 @@ class TheGame
         return toReturn;
     }
 
-    static int ConvertCoordinateToInt(string input) 
+    static int ConvertCoordinateToInt(string input)
     {
         int row = 0;
         switch (input)
         {
             case "A": row = 0; break;
             case "B": row = 1; break;
-            case "C": row = 2; break; 
+            case "C": row = 2; break;
             case "D": row = 3; break;
             case "E": row = 4; break;
             case "F": row = 5; break;
