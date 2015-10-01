@@ -56,6 +56,11 @@ class TheGame
         bool end = true;
 
         List<string> destroyedShips = new List<string>();
+        List<Battleship> aiShipsToRemove = new List<Battleship>();
+        foreach (var ship in aiShips)
+        {
+            aiShipsToRemove.Add(ship);
+        }
 
         while (end)
         {
@@ -64,6 +69,13 @@ class TheGame
             Console.SetCursorPosition(0, 14);
             Console.WriteLine("Destroyed ships: ");
             Console.WriteLine(string.Join(", ", destroyedShips)); // printing the destroyed ships
+
+            if (aiShipsToRemove.Count == 0)
+            {
+                Console.WriteLine("YOU WIN");
+                break;
+            }
+
             Console.WriteLine("Enter target cooridnates, admiral!");
             Console.Write("Target coordinates: ");
             shooter = Console.ReadLine();
@@ -95,6 +107,7 @@ class TheGame
                         if (!destroyedShips.Contains(ship.rank))
                         {
                             destroyedShips.Add(ship.rank);
+                            aiShipsToRemove.Remove(ship);
                         }
                     }
                 }
@@ -106,6 +119,7 @@ class TheGame
                 Console.WriteLine("We didn't get them this time!");
                 Thread.Sleep(1000);
             }
+
             Console.Clear();
             PrintMatrix(player.Board, player.name);
 
@@ -139,6 +153,7 @@ class TheGame
             
             
         }
+        Console.WriteLine("Press Enter to quit.");
     }
 
     static Battleship PlaceShip(string rank, int size, Player player, char sign)
@@ -316,11 +331,9 @@ class TheGame
                 player.board[row, col] = 'X'; //Put X sign if hit
                 break;
             }
-            else
-            {
-                player.board[row, col] = '$'; //Put $ sign of miss
-            }
+
         }
+        player.board[row, col] = '$'; //Put $ sign of miss
         
         
         return collision;
