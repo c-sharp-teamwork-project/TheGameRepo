@@ -11,8 +11,10 @@ namespace GameClasses
         public int size;
         public char orientation;
         public int health;
+        //added a specific character for each ship
+        public char signature;
 
-        public Battleship(string rank, int x, int y, int size, char orientation)
+        public Battleship(string rank, int x, int y, int size, char orientation, char signature)
         {
             this.rank = rank;
             this.x = x;
@@ -20,6 +22,7 @@ namespace GameClasses
             this.size = size;
             this.orientation = orientation;
             this.health = size;
+            this.signature = signature;
         }
 
         public string Rank
@@ -86,6 +89,17 @@ namespace GameClasses
             set
             {
                 health = value;
+            }
+        }
+        public char Signature
+        {
+            get
+            {
+                return signature;
+            }
+            set
+            {
+                signature = value;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameClasses;
+using System.Threading;
 
 class TheGame
 {
@@ -11,6 +12,7 @@ class TheGame
 
         int[] shipSizes = { 2, 3, 3, 4, 5 };
         string[] shipRanks = { "Scout", "Submarine", "Destroyer", "BattleShip", "Aircraft Carrier" };
+        char[] shipChar = { 'S', 'U', 'D', 'B', 'C' };
         
         List<Battleship> playerShips = new List<Battleship>();
         List<Battleship> aiShips = new List<Battleship>();
@@ -18,14 +20,14 @@ class TheGame
         Player player = new Player("Playerrrrrrrrrr");
         Player ai = new Player("Easy Bot");
 
-        //StartScreen();
+       // StartScreen();
         
         // Printing player/ai names
-        Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
-        Console.WriteLine(player.Name);
+        //Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
+        //Console.WriteLine(player.Name);
         
-        Console.SetCursorPosition(40, 0);
-        Console.WriteLine(ai.Name);
+        //Console.SetCursorPosition(40, 0);
+        //Console.WriteLine(ai.Name);
 
         PrintMatrix(player.Board, player.name);
         PrintAIMatrix(player.Board, ai.name);
@@ -33,37 +35,57 @@ class TheGame
         // Create a separate list for The AI
         for (int i = 0; i < 5; i++) 
         {
-            aiShips.Add(MakeShipAI(shipRanks[i], shipSizes[i], ai));
+            aiShips.Add(MakeShipAI(shipRanks[i], shipSizes[i], ai, shipChar[i]));
             AddShipOnBoard(aiShips[i], ai);
         }
 
-        // Read player ships
-        //for (int i = 0; i < 1; i++) 
-        //{
-        //    Console.SetCursorPosition(1, 14);
-        //    playerShips.Add(PlaceShip(shipRanks[i], shipSizes[i], player));
-        //    AddShipOnBoard(playerShips[i], player);
-        //    Console.Clear();
-        //    PrintMatrix(player.Board, player.name);
-        //    PrintAIMatrix(ai.Board, ai.name);
-        //}
-
-        // Test Shooting
-        string shoot = Console.ReadLine();
-        while (true)
+         //Read player ships
+        for (int i = 0; i < 1; i++)
         {
-            
-            Console.Clear();
             Console.SetCursorPosition(1, 14);
+            playerShips.Add(PlaceShip(shipRanks[i], shipSizes[i], player, shipChar[i]));
+            AddShipOnBoard(playerShips[i], player);
+            Console.Clear();
             PrintMatrix(player.Board, player.name);
             PrintAIMatrix(ai.Board, ai.name);
-            Console.WriteLine("Shoot!");
-            Console.WriteLine(CheckForCollision(aiShips, ai, shoot));
+        }
+
+        // Test Shooting
+        
+        string shoot = string.Empty;
+        bool end = true;
+        while (end)
+        {
+            
+            
+            Console.SetCursorPosition(0, 14);
+            
+            Console.WriteLine("Enter target cooridnates, admiral!");
+            Console.Write("Target coordinates: ");
             shoot = Console.ReadLine();
+            
+            if (CollisionCheck(aiShips, ai, shoot))
+            {
+                Console.WriteLine("Direct hit!");
+                Thread.Sleep(1000);
+                
+            }
+            else
+            {
+                Console.WriteLine("We didn't get them this time!");
+                Thread.Sleep(1000);
+            }
+            Console.Clear();
+            PrintMatrix(player.Board, player.name);
+            PrintAIMatrix(ai.Board, ai.name);
+            end = true;
+            
+            
+            
         }
     }
 
-    static Battleship PlaceShip(string rank, int size, Player player)
+    static Battleship PlaceShip(string rank, int size, Player player, char sign)
     {
         Console.WriteLine("Battleship Rank: {0}, Size: {1}", rank, size);
         Console.Write("Input row and col coordinates: ");
@@ -87,11 +109,12 @@ class TheGame
             direction = Convert.ToChar(Console.ReadLine());
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, player);
         }
-        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
+        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction, sign);
         return ship;
     }
-    static Battleship MakeShipAI(string rank, int size, Player player)
+    static Battleship MakeShipAI(string rank, int size, Player player, char sign)
     {
+        
         Random rnd = new Random();
         int coordinatesX = rnd.Next(0, 10);
         int coordinatesY = rnd.Next(0, 10);
@@ -121,7 +144,7 @@ class TheGame
             }
             validPosition = ValidatePosition(coordinatesX, coordinatesY, size, direction, player);
         }
-        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction);
+        Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction, sign);
         return ship;
     }
     static void PrintMatrix(char[,] matrix, string playerName)
@@ -179,13 +202,13 @@ class TheGame
     {
         for (int i = 0; i < ship.Size; i++)
         {
-            player.board[ship.CurrentX, ship.CurrentY] = 'S';
+            player.board[ship.CurrentX, ship.CurrentY] = ship.signature;
             switch (ship.Direction)
             {
-                case 'R': ship.y += 1; break;
-                case 'D': ship.x += 1; break;
-                case 'L': ship.y -= 1; break;
-                case 'U': ship.x -= 1; break;
+                case 'R': ship.y ++; break;
+                case 'D': ship.x ++; break;
+                case 'L': ship.y --; break;
+                case 'U': ship.x --; break;
                 default: break;
             }
         }
@@ -199,9 +222,9 @@ class TheGame
         {
             int shipX = shipList[i].CurrentX;
             int shipY = shipList[i].CurrentY;
-
+            string name = shipList[i].rank;
             int fireX = ConvertCoordinateToInt(coordinates[0].ToString());
-            int fireY = int.Parse(coordinates[2].ToString()) - 1;
+                int fireY = int.Parse(coordinates[2].ToString()) - 1;
 
             for (int square = 0; square < shipList[i].Size; square++) // Check every square the ship occupies one by one 
             {
@@ -222,6 +245,27 @@ class TheGame
                 }
             }
         }
+        return collision;
+    }
+    static bool CollisionCheck(List<Battleship> shiplist, Player attackedPlayer, string shotCoordinates)
+    {
+        bool collision = false;
+        string[] coordinates = shotCoordinates.Split();
+        int row = ConvertCoordinateToInt(coordinates[0].ToString());
+        int col = int.Parse(coordinates[1])-1;
+        
+        for (int i = 0; i < shiplist.Count; i++)
+        {
+            if (attackedPlayer.board[row,col] == shiplist[i].signature)
+            {
+                collision =true;
+                shiplist[i].health--;
+                attackedPlayer.board[row, col] = 'X';
+                break;
+            }
+        }
+        
+        
         return collision;
     }
 
