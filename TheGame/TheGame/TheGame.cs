@@ -54,19 +54,34 @@ class TheGame
         
         string shoot = string.Empty;
         bool end = true;
+
+        List<string> destroyedShips = new List<string>();
+
         while (end)
         {
             
             
             Console.SetCursorPosition(0, 14);
-            
+            Console.WriteLine("Destroyed ships: ");
+            Console.WriteLine(string.Join(", ", destroyedShips));
             Console.WriteLine("Enter target cooridnates, admiral!");
             Console.Write("Target coordinates: ");
             shoot = Console.ReadLine();
             
             if (CollisionCheck(aiShips, ai, shoot))
             {
+                Console.Beep();
                 Console.WriteLine("Direct hit!");
+                foreach (var ship in aiShips)
+                {
+                    if (ship.health == 0)
+                    {
+                        if (!destroyedShips.Contains(ship.rank))
+                        {
+                            destroyedShips.Add(ship.rank);
+                        }
+                    }
+                }
                 Thread.Sleep(1000);
                 
             }
@@ -77,6 +92,7 @@ class TheGame
             }
             Console.Clear();
             PrintMatrix(player.Board, player.name);
+
             PrintAIMatrix(ai.Board, ai.name);
             end = true;
             
@@ -400,4 +416,5 @@ class TheGame
         }
         return row;
     }
+
 }
