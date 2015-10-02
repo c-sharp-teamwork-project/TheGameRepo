@@ -470,8 +470,8 @@ class TheGame
     {
         // Method works with lowercase and uppercase characters from a-j, 
         // including whitespaces in the beginning, middle or end
-        Regex withDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d][0]?\s*[udlrUDLR]\s*$");
-        Regex withoutDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d][0]?\s*$");
+        Regex withDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
+        Regex withoutDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*$");
         Regex directionRGX = new Regex(@"^\s*[udlrUDLR]\s*$");
 
         Console.SetCursorPosition(1, 15);
