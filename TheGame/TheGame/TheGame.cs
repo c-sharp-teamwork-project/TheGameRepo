@@ -28,16 +28,10 @@ class TheGame
 
         Player player = new Player(playerName);
         Player ai = new Player("Easy Bot");
-
-        // Printing player/ai names
-        //Console.SetCursorPosition(26 / 2-player.name.Length/2, 0);
-        //Console.WriteLine(player.Name);
-
-        //Console.SetCursorPosition(40, 0);
-        //Console.WriteLine(ai.Name);
+        Player emptyPlayer = new Player("Easy Bot");
 
         PrintMatrix(player.Board, player.name);
-        PrintAIMatrix(player.Board, ai.name);
+        PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
 
         // Create a separate list for The AI
         for (int i = 0; i < 5; i++)
@@ -54,7 +48,7 @@ class TheGame
             AddShipOnBoard(playerShips[i], player);
             Console.Clear();
             PrintMatrix(player.Board, player.name);
-            PrintAIMatrix(ai.Board, ai.name);
+            PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
         }
 
         // Test Shooting
@@ -93,7 +87,7 @@ class TheGame
             {
                 Console.Clear();
                 PrintMatrix(player.Board, player.name);
-                PrintAIMatrix(ai.Board, ai.name);
+                PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
                 string winner = "YOU WIN";
                 Console.WriteLine(new string(' ', (55 / 2) - (winner.Length / 2)) + winner);
                 break;
@@ -102,7 +96,7 @@ class TheGame
             {
                 Console.Clear();
                 PrintMatrix(player.Board, player.name);
-                PrintAIMatrix(ai.Board, ai.name);
+                PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
                 string loser = "YOU LOSE";
                 Console.WriteLine(new string(' ', (55 / 2) - (loser.Length / 2)) + loser);
                 break;
@@ -117,7 +111,7 @@ class TheGame
             int rowShoot = ConvertCoordinateToInt(shoot[0].ToString());
             int colShoot = int.Parse(shoot[1].ToString()) - 1;
 
-            while (player.Board[rowShoot, colShoot] == '$' && player.Board[rowShoot, colShoot] == 'X')
+            while (ai.Board[rowShoot, colShoot] == '$' || ai.Board[rowShoot, colShoot] == 'X')
             {
                 Console.WriteLine("Invalid input! Try again. ");
                 Console.Write("Target coordinates: ");
@@ -127,7 +121,7 @@ class TheGame
                 colShoot = int.Parse(shoot[1].ToString()) - 1;
             }
 
-            if (CollisionCheck(aiShips, ai, rowShoot, colShoot))
+            if (CollisionCheckForPlayer(aiShips, ai, rowShoot, colShoot, emptyPlayer))
             {
                 Console.Beep();
                 playerLastTurnOutcome = "Direct hit! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
@@ -154,19 +148,19 @@ class TheGame
             Console.Clear();
             PrintMatrix(player.Board, player.name);
 
-            PrintAIMatrix(ai.Board, ai.name);
+            PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
 
             Random rnd = new Random(); //getting the ai row and col to shoot
             rowShoot = rnd.Next(0, 10);
             colShoot = rnd.Next(0, 10);
-            while (ai.Board[rowShoot, colShoot] == '$')
+            while (player.Board[rowShoot, colShoot] == '$' || player.board[rowShoot, colShoot] == 'X')
             {
                 rnd = new Random();
                 rowShoot = rnd.Next(0, 10);
                 colShoot = rnd.Next(0, 10);
             }
 
-            if (CollisionCheck(playerShips, player, rowShoot, colShoot))
+            if (CollisionCheckForAI(playerShips, player, rowShoot, colShoot))
             {
                 Console.Beep(); ;
                 aiLastTurnOutcome = "Direct hit! " + "- " + GetRowChar(rowShoot) + (colShoot + 1);
@@ -183,14 +177,11 @@ class TheGame
             Console.Clear();
             PrintMatrix(player.Board, player.name);
 
-            PrintAIMatrix(ai.Board, ai.name);
+            PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
 
             end = true;
 
-
-
         }
-        Console.WriteLine("Press Enter to quit.");
     }
 
     static Battleship PlaceShip(string rank, int size, Player player, char sign)
@@ -323,7 +314,31 @@ class TheGame
         }
     }
 
-    static bool CollisionCheck(List<Battleship> shiplist, Player player, int row, int col)
+    static bool CollisionCheckForPlayer(List<Battleship> shiplist, Player ai, int row, int col, Player emptyPlayer)
+    {
+        bool collision = false;
+
+        for (int i = 0; i < shiplist.Count; i++)
+        {
+            if (ai.board[row, col] == shiplist[i].signature)
+            {
+                collision = true;
+                shiplist[i].health--;
+                ai.board[row, col] = 'X'; //Put X sign if hit on the ai table
+                emptyPlayer.board[row, col] = 'X'; //Put X sign if hit on the empty table
+                break;
+            }
+            if (i == shiplist.Count - 1 && ai.board[row, col] != shiplist[i].signature)
+            {
+                ai.board[row, col] = '$'; //Put $ sign of miss on the ai table
+                emptyPlayer.board[row, col] = '$'; //Put $ sign of miss on the empty table
+            }
+
+        }
+
+        return collision;
+    }
+    static bool CollisionCheckForAI(List<Battleship> shiplist, Player player, int row, int col)
     {
         bool collision = false;
 

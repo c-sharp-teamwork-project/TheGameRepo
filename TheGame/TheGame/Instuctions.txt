@@ -11,7 +11,8 @@ Instuctions:
  4) When the game starts the AI and you will take turns on bombarding your ships.
  5) The bombarding happens by inputting the coordinates that you want to bombard (the same as with placing the ships).
  7) If you are successful in hitting a ship a "X" will appear on the coordinates that you have inputted and you will hear a beep, but if there is no ship there it will be a "$".
- 8) When you destroy a whole ship it will be listed under your table.
+ 8) After both you and the AI take a turn, the result will be shown under the table.
+ 8) When you destroy a whole ship it will be listed under your previous result.
  9) Whoever sinks all the ships first is the winner.
  
 Press Enter to continue: 
