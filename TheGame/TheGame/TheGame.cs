@@ -16,6 +16,7 @@ class TheGame
         
         List<Battleship> playerShips = new List<Battleship>();
         List<Battleship> aiShips = new List<Battleship>();
+        List<Battleship> destroyedEnemyShips = new List<Battleship>();
 
         Player player = new Player("Playerrrrrrrrrr");
         Player ai = new Player("Easy Bot");
@@ -64,10 +65,11 @@ class TheGame
             Console.Write("Target coordinates: ");
             shoot = Console.ReadLine();
             
-            if (CollisionCheck(aiShips, ai, shoot))
+            if (CollisionCheck(aiShips,destroyedEnemyShips, ai, shoot))
             {
                 Console.WriteLine("Direct hit!");
                 Thread.Sleep(1000);
+               
                 
             }
             else
@@ -247,7 +249,7 @@ class TheGame
         }
         return collision;
     }
-    static bool CollisionCheck(List<Battleship> shiplist, Player attackedPlayer, string shotCoordinates)
+    static bool CollisionCheck(List<Battleship> shiplist, List<Battleship> destroyedShips, Player attackedPlayer, string shotCoordinates)
     {
         bool collision = false;
         string[] coordinates = shotCoordinates.Split();
@@ -260,6 +262,14 @@ class TheGame
             {
                 collision =true;
                 shiplist[i].health--;
+                //some sort of logic to track destroyed ships
+                //will work it out
+                //later on
+
+                //if (shiplist[i].health == 0)
+                //{
+                //    destroyedShips.Add(shiplist[i]);
+                //}
                 attackedPlayer.board[row, col] = 'X';
                 break;
             }
