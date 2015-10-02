@@ -1,0 +1,18 @@
+
+
+
+Instuctions: 
+ 1) In this game you will start by placing 5 ships on your board.
+ 2) When asked for coordinates you have to input a letter from "A" to "J" (this is the row coordinate),followed by a number from 1 to 10 (this is the column coordinate). 
+ 
+ !!!Remember to input them on a single line, separated by a space!!!
+
+ 3) When asked for a position you must enter "L" for "Left", "R" for "Right", "U" for "Up" or "D" for "Down".
+ 4) When the game starts the AI and you will take turns on bombarding your ships.
+ 5) The bombarding happens by inputting the coordinates that you want to bombard (the same as with placing the ships).
+ 7) If you are successful in hitting a ship a "X" will appear on the coordinates that you have inputted and you will hear a beep, but if there is no ship there it will be a "$".
+ 8) After both you and the AI take a turn, the result will be shown under the table.
+ 8) When you destroy a whole ship it will be listed under your previous result.
+ 9) Whoever sinks all the ships first is the winner.
+ 
+Press Enter to continue: 
