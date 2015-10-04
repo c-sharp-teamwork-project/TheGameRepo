@@ -13,7 +13,7 @@ class TheGame
         Console.BufferWidth = Console.WindowWidth = 55;
 
         int[] shipSizes = { 2, 3, 3, 4, 5 };
-        string[] shipRanks = { "Scout", "Submarine", "Destroyer", "BattleShip", "Aircraft Carrier" };
+        string[] shipRanks = { "Scout", "U-Boat", "Destroyer", "BattleShip", "Aircraft Carrier" };
         char[] shipChar = { 'S', 'U', 'D', 'B', 'C' };
 
 
@@ -40,6 +40,7 @@ class TheGame
         {
             aiShips.Add(MakeShipAI(shipRanks[i], shipSizes[i], ai, shipChar[i]));
             AddShipOnBoard(aiShips[i], ai);
+            //PrintAIMatrix(ai.Board, ai.name);
         }
 
         //Read player ships
@@ -55,8 +56,10 @@ class TheGame
                 {
                     break;
                 }
+                
                 Console.SetCursorPosition(1, 15);
-                Console.WriteLine("Outside of boundries! .. Give it another go ..");
+                Console.WriteLine("Ship cannot be placed there!");
+                Thread.Sleep(1500);
                 input = GetValidInput();
             }
             playerShips.Add(CreateShip(input, shipRanks[i], shipSizes[i], player, shipChar[i]));
@@ -237,38 +240,40 @@ class TheGame
 
     static Battleship MakeShipAI(string rank, int size, Player player, char sign)
     {
-
+        
         Random rnd = new Random();
-        int coordinatesX = rnd.Next(0, 10);
+        int coordinatesX = rnd.Next(0,10);
         int coordinatesY = rnd.Next(0, 10);
         int intDirection = rnd.Next(1, 5);
         char direction = ' ';
         switch (intDirection)
         {
-            case 1: direction = 'R'; break;
-            case 2: direction = 'D'; break;
-            case 3: direction = 'L'; break;
-            case 4: direction = 'U'; break;
+            case 1: direction = 'r'; break;
+            case 2: direction = 'd'; break;
+            case 3: direction = 'l'; break;
+            case 4: direction = 'u'; break;
             default: break;
         }
 
-        // DELETE IF IT WORKS
-        //bool validPosition = ValidPosition(coordinatesX, coordinatesY, size, direction, player);
-        //while (!validPosition)
-        //{
-        //    coordinatesX = rnd.Next(0, 10);
-        //    coordinatesY = rnd.Next(0, 10);
-        //    intDirection = rnd.Next(1, 5);
-        //    switch (intDirection)
-        //    {
-        //        case 1: direction = 'R'; break;
-        //        case 2: direction = 'D'; break;
-        //        case 3: direction = 'L'; break;
-        //        case 4: direction = 'U'; break;
-        //        default: break;
-        //    }
-        //    validPosition = ValidPosition(coordinatesX, coordinatesY, size, direction, player);
-        //}
+        string aiCoordinates = coordinatesX.ToString() + coordinatesY.ToString();
+        bool validPosition = ValidPositionAI(aiCoordinates, size, direction, player);
+        while (validPosition == false)
+        {
+            coordinatesX = rnd.Next(0,10);
+            coordinatesY = rnd.Next(0, 10);
+            intDirection = rnd.Next(1, 5);
+            direction = ' ';
+            switch (intDirection)
+            {
+                case 1: direction = 'r'; break;
+                case 2: direction = 'd'; break;
+                case 3: direction = 'l'; break;
+                case 4: direction = 'u'; break;
+                default: break;
+            }
+            aiCoordinates = coordinatesX.ToString() +coordinatesY.ToString();
+            validPosition = ValidPositionAI(aiCoordinates, size, direction, player);
+        }
         Battleship ship = new Battleship(rank, coordinatesX, coordinatesY, size, direction, sign);
         return ship;
     }
@@ -301,6 +306,39 @@ class TheGame
             Console.WriteLine();
         }
     }
+
+    //variation of ValidPosition Method, that splits the input string into 2 ints
+    static bool ValidPositionAI(string input, int shipLength, char shipDirection, Player player)
+    {
+        int shipX = int.Parse(input[0].ToString());
+        int shipY = int.Parse(input[1].ToString());
+        bool shipPlaced = true;
+
+        for (int i = 0; i < shipLength; i++)
+        {
+            if (shipX < 0 || shipY < 0 || shipX >= player.board.GetLength(0) || shipY >= player.board.GetLength(1) || player.board[shipX, shipY] != 'O')
+            {
+                shipPlaced = false;
+                break;
+            }
+            switch (shipDirection)
+            {
+                case 'r': shipY++; break;
+                case 'd': shipX++; break;
+                case 'l': shipY--; break;
+                case 'u': shipX--; break;
+                default: break;
+            }
+            if (shipX < 0 || shipY < 0 || shipX >= player.board.GetLength(0) || shipY >= player.board.GetLength(1) || player.board[shipX, shipY] != 'O')
+            {
+                shipPlaced = false;
+                break;
+            }
+        }
+        return shipPlaced;
+    }
+    //variation of ValidPosition Method, that splits the input string into 2 ints
+
     static bool ValidPosition(string input, int shipLength, char shipDirection, Player player)
     {
         int shipX = ConvertToInt(input[0].ToString());
@@ -321,6 +359,11 @@ class TheGame
                 case 'l': shipY--; break;
                 case 'u': shipX--; break;
                 default: break;
+            }
+            if (shipX < 0 || shipY < 0 || shipX >= player.board.GetLength(0) || shipY >= player.board.GetLength(1) || player.board[shipX, shipY] != 'O')
+            {
+                shipPlaced = false;
+                break;
             }
         }
         return shipPlaced;
@@ -360,6 +403,7 @@ class TheGame
                 ai.board[row, col] = '$'; //Put $ sign of miss on the ai table
                 emptyPlayer.board[row, col] = '$'; //Put $ sign of miss on the empty table
             }
+            
 
         }
 
@@ -463,7 +507,7 @@ class TheGame
 
     static char GetRowChar(int i)
     {
-        char[] charToReturn = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'J', 'H', 'I', 'J', };
+        char[] charToReturn = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', };
         return charToReturn[i];
     }
 
@@ -496,6 +540,8 @@ class TheGame
         Regex directionRGX = new Regex(@"^\s*[udlrUDLR]\s*$");
         Regex whitespace = new Regex(@"\s*");
 
+        Console.SetCursorPosition(0, 15);
+        Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(1, 15);
         Console.Write("Where to place your ship?");
         while (true)
@@ -528,13 +574,19 @@ class TheGame
 
                         return command + direction;
                     }
+
                     
+                    Console.SetCursorPosition(0, 16);
+                    Console.Write(new string(' ', Console.WindowWidth));
                     Console.SetCursorPosition(1, 16);
                     Console.Write("Ughh, can you repeat directions!");
                 }
             }
-           
+
+            Console.SetCursorPosition(0, 15);
+            Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(1, 15);
+
             Console.Write("Arrgh! I didnt get that..");
         }
     }
