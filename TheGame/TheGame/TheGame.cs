@@ -518,10 +518,12 @@ class TheGame
                         direction = direction.Replace(@"s+", "").ToLower();
                         return command + direction;
                     }
+                    
                     Console.SetCursorPosition(1, 16);
                     Console.Write("Ughh, can you repeat directions!");
                 }
             }
+           
             Console.SetCursorPosition(1, 15);
             Console.Write("Arrgh! I didnt get that..");
         }
