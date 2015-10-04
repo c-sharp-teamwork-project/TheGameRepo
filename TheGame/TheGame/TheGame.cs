@@ -494,6 +494,7 @@ class TheGame
         Regex withDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
         Regex withoutDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*$");
         Regex directionRGX = new Regex(@"^\s*[udlrUDLR]\s*$");
+        Regex whitespace = new Regex(@"\s*");
 
         Console.SetCursorPosition(1, 15);
         Console.Write("Where to place your ship?");
@@ -502,7 +503,11 @@ class TheGame
             string command = Console.ReadLine();
             if (withDirectionRGX.Match(command).Success)
             {
+
                 command = command.Replace(@"\s*", "").ToLower();
+
+                command = whitespace.Replace(command, "");
+
                 return command;
             }
             else if (withoutDirectionRGX.Match(command).Success)
@@ -514,8 +519,13 @@ class TheGame
                     string direction = Console.ReadLine();
                     if (directionRGX.Match(direction).Success)
                     {
+
                         command = command.Replace(@"\s*", "").ToLower();
                         direction = direction.Replace(@"\s*", "").ToLower();
+
+                        command = whitespace.Replace(command, "").ToLower();
+                        direction = whitespace.Replace(direction, "").ToLower();
+
                         return command + direction;
                     }
                     
