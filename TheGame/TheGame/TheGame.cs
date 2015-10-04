@@ -502,7 +502,7 @@ class TheGame
             string command = Console.ReadLine();
             if (withDirectionRGX.Match(command).Success)
             {
-                command = command.Replace(@"s+", "").ToLower();
+                command = command.Replace(@"\s*", "").ToLower();
                 return command;
             }
             else if (withoutDirectionRGX.Match(command).Success)
@@ -514,8 +514,8 @@ class TheGame
                     string direction = Console.ReadLine();
                     if (directionRGX.Match(direction).Success)
                     {
-                        command = command.Replace(@"s+", "").ToLower();
-                        direction = direction.Replace(@"s+", "").ToLower();
+                        command = command.Replace(@"\s*", "").ToLower();
+                        direction = direction.Replace(@"\s*", "").ToLower();
                         return command + direction;
                     }
                     
