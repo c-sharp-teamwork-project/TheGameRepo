@@ -81,7 +81,7 @@ class TheGame
             PrintAIMatrix(ai.Board, emptyPlayer.name);
         }
 
-
+        
         Console.ResetColor();
         // This should be the start
         string playerLastTurnOutcome = "";
