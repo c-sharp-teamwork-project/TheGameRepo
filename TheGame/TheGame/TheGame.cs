@@ -56,7 +56,7 @@ class TheGame
         }
 
         //Read player ships
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 5; i++)
         {
             Console.SetCursorPosition(0, 30);
             Console.WriteLine("Battleship Rank: {0}, Size: {1}", shipRanks[i], shipSizes[i]);
@@ -542,9 +542,7 @@ class TheGame
     {
         // Method works with lowercase and uppercase characters from a-j, 
         // including whitespaces in the beginning, middle or end
-        Regex withDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
-        Regex withoutDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*$");
-        Regex directionRGX = new Regex(@"^\s*[udlrUDLR]\s*$");
+        Regex withDirectionRGX = new Regex(@"^\s*[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
         Regex whitespace = new Regex(@"\s*");
 
         Console.SetCursorPosition(0, 31);
@@ -556,38 +554,11 @@ class TheGame
             string command = Console.ReadLine();
             if (withDirectionRGX.Match(command).Success)
             {
-
                 command = command.Replace(@"\s*", "").ToLower();
 
                 command = whitespace.Replace(command, "");
 
                 return command;
-            }
-            else if (withoutDirectionRGX.Match(command).Success)
-            {
-                Console.SetCursorPosition(0,32);
-                Console.Write("Give me direction!: ");
-                while (true)
-                {
-                    string direction = Console.ReadLine();
-                    if (directionRGX.Match(direction).Success)
-                    {
-
-                        command = command.Replace(@"\s*", "").ToLower();
-                        direction = direction.Replace(@"\s*", "").ToLower();
-
-                        command = whitespace.Replace(command, "").ToLower();
-                        direction = whitespace.Replace(direction, "").ToLower();
-
-                        return command + direction;
-                    }
-
-
-                    Console.SetCursorPosition(0, 31);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, 31);
-                    Console.Write("Ughh, can you repeat the directions?: ");
-                }
             }
 
             Console.SetCursorPosition(0, 31);
