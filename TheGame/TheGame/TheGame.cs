@@ -17,7 +17,7 @@ class TheGame
         char[] shipChar = { 'S', 'U', 'D', 'B', 'C' };
 
 
-        //StartScreen();
+        StartScreen();
 
         List<Battleship> playerShips = new List<Battleship>();
         List<Battleship> aiShips = new List<Battleship>();
@@ -30,6 +30,8 @@ class TheGame
         List<string> destroyedShips = new List<string>();
         const ConsoleColor ENEMY = ConsoleColor.Red;
 
+
+        Console.SetCursorPosition(10, 30 / 2);
         Console.Write("Please enter your name: ");
         string playerName = Console.ReadLine();
 
@@ -46,7 +48,7 @@ class TheGame
         Console.ResetColor();
 
         // Create a separate list for The AI
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 5; i++)
         {
             aiShips.Add(MakeShipAI(shipRanks[i], shipSizes[i], ai, shipChar[i]));
             AddShipOnBoard(aiShips[i], ai);
@@ -77,13 +79,13 @@ class TheGame
             Console.Clear();
             PrintMatrix(player.Board, player.name);
             Console.ForegroundColor = ENEMY;
-            //printing AI board once for easier testing of end-game phase etc.
-            PrintAIMatrix(ai.Board, emptyPlayer.name);
+            //if its ai.Board and not emtpyPlayer.Board its for printing the AI board once for easier testing of end-game phase etc.
+            PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
+            Console.ResetColor();
         }
 
         
         Console.ResetColor();
-        // This should be the start
         string playerLastTurnOutcome = "";
         string aiLastTurnOutcome = "";
 
@@ -401,22 +403,27 @@ class TheGame
 
     static void StartScreen()
     {
-        string gameName = "The Amazing Battleships";
-        Console.SetCursorPosition((55 / 2) - (gameName.Length / 2), 0);
+        string gameName = "L'Attaque";
+        Console.SetCursorPosition((55 / 2) - (gameName.Length / 2), 3);
 
-        Console.WriteLine("The Amazing Battleships");
+        Console.WriteLine("L'Attaque");
 
         StreamReader reader = new StreamReader("../../Instuctions.txt");
 
         using (reader)
         {
+            int counter = 3;
             string line = reader.ReadLine();
             while (line != null)
             {
+                Console.SetCursorPosition((55 / 2) - (line.Length / 2), counter);
                 Console.WriteLine(line);
                 line = reader.ReadLine();
+                counter++;
             }
         }
+        Console.SetCursorPosition((55 / 2) - ("Press Enter".Length / 2), 23);
+        Console.Write("Press Enter");
         Console.ReadLine();
         Console.Clear();
 
@@ -501,6 +508,7 @@ class TheGame
 
                 while (ai.Board[rowShoot, colShoot] == '$' || ai.Board[rowShoot, colShoot] == 'X')
                 {
+                    
                     Console.SetCursorPosition(0, 30);
                     Console.Write(new string(' ', Console.WindowWidth));
                     Console.SetCursorPosition(0, 30);
@@ -511,8 +519,11 @@ class TheGame
                     command = Console.ReadLine();
                     command = whitespace.Replace(command, "").ToLower();
 
-                    rowShoot = ConvertToInt(command[0].ToString());
-                    colShoot = int.Parse(command[1].ToString());
+                    if (shootRGX.Match(command).Success)
+                    {
+                        rowShoot = ConvertToInt(command[0].ToString());
+                        colShoot = int.Parse(command[1].ToString());
+                    }
                 }
                 break;
             }
@@ -539,7 +550,7 @@ class TheGame
         Console.SetCursorPosition(0, 31);
         Console.Write(new string(' ', Console.WindowWidth));
         Console.SetCursorPosition(0, 31);
-        Console.Write("Where to place your ship?");
+        Console.Write("Where to place your ship?: ");
         while (true)
         {
             string command = Console.ReadLine();
@@ -555,7 +566,7 @@ class TheGame
             else if (withoutDirectionRGX.Match(command).Success)
             {
                 Console.SetCursorPosition(0,32);
-                Console.Write("Give me direction!");
+                Console.Write("Give me direction!: ");
                 while (true)
                 {
                     string direction = Console.ReadLine();
@@ -575,7 +586,7 @@ class TheGame
                     Console.SetCursorPosition(0, 31);
                     Console.Write(new string(' ', Console.WindowWidth));
                     Console.SetCursorPosition(0, 31);
-                    Console.Write("Ughh, can you repeat directions!");
+                    Console.Write("Ughh, can you repeat the directions?: ");
                 }
             }
 
@@ -583,7 +594,9 @@ class TheGame
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, 31);
 
-            Console.Write("Arrgh! I didnt get that..");
+            Console.Write("Arrgh! I didnt get that..: ");
+            
+
         }
     }
 }
