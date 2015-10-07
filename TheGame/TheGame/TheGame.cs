@@ -30,6 +30,8 @@ class TheGame
         List<string> destroyedShips = new List<string>();
         const ConsoleColor ENEMY = ConsoleColor.Red;
 
+
+        Console.SetCursorPosition(10, 30 / 2);
         Console.Write("Please enter your name: ");
         string playerName = Console.ReadLine();
 
@@ -54,7 +56,7 @@ class TheGame
         }
 
         //Read player ships
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Console.SetCursorPosition(0, 30);
             Console.WriteLine("Battleship Rank: {0}, Size: {1}", shipRanks[i], shipSizes[i]);
@@ -84,7 +86,6 @@ class TheGame
 
 
         Console.ResetColor();
-        // This should be the start
         string playerLastTurnOutcome = "";
         string aiLastTurnOutcome = "";
 
@@ -402,22 +403,27 @@ class TheGame
 
     static void StartScreen()
     {
-        string gameName = "The Amazing Battleships";
-        Console.SetCursorPosition((55 / 2) - (gameName.Length / 2), 0);
+        string gameName = "L'Attaque";
+        Console.SetCursorPosition((55 / 2) - (gameName.Length / 2), 3);
 
-        Console.WriteLine("The Amazing Battleships");
+        Console.WriteLine("L'Attaque");
 
         StreamReader reader = new StreamReader("../../Instuctions.txt");
 
         using (reader)
         {
+            int counter = 3;
             string line = reader.ReadLine();
             while (line != null)
             {
+                Console.SetCursorPosition((55 / 2) - (line.Length / 2), counter);
                 Console.WriteLine(line);
                 line = reader.ReadLine();
+                counter++;
             }
         }
+        Console.SetCursorPosition((55 / 2) - ("Press Enter".Length / 2), 23);
+        Console.Write("Press Enter");
         Console.ReadLine();
         Console.Clear();
 
@@ -502,6 +508,7 @@ class TheGame
 
                 while (ai.Board[rowShoot, colShoot] == '$' || ai.Board[rowShoot, colShoot] == 'X')
                 {
+                    
                     Console.SetCursorPosition(0, 30);
                     Console.Write(new string(' ', Console.WindowWidth));
                     Console.SetCursorPosition(0, 30);
@@ -512,8 +519,11 @@ class TheGame
                     command = Console.ReadLine();
                     command = whitespace.Replace(command, "").ToLower();
 
-                    rowShoot = ConvertToInt(command[0].ToString());
-                    colShoot = int.Parse(command[1].ToString());
+                    if (shootRGX.Match(command).Success)
+                    {
+                        rowShoot = ConvertToInt(command[0].ToString());
+                        colShoot = int.Parse(command[1].ToString());
+                    }
                 }
                 break;
             }
