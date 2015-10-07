@@ -545,7 +545,7 @@ class TheGame
     {
         // Method works with lowercase and uppercase characters from a-j, 
         // including whitespaces in the beginning, middle or end
-        Regex withDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
+        Regex withDirectionRGX = new Regex(@"^\s*[a-jA-J]\s*[\d]\s*[udlrUDLR]\s*$");
         Regex withoutDirectionRGX = new Regex(@"^[a-jA-J]\s*[\d]\s*$");
         Regex directionRGX = new Regex(@"^\s*[udlrUDLR]\s*$");
         Regex whitespace = new Regex(@"\s*");
@@ -566,32 +566,32 @@ class TheGame
 
                 return command;
             }
-            else if (withoutDirectionRGX.Match(command).Success)
-            {
-                Console.SetCursorPosition(0, 32);
-                Console.Write("Give me direction!: ");
-                while (true)
-                {
-                    string direction = Console.ReadLine();
-                    if (directionRGX.Match(direction).Success)
-                    {
+            //else if (withoutDirectionRGX.Match(command).Success)
+            //{
+            //    Console.SetCursorPosition(0, 32);
+            //    Console.Write("Give me direction!: ");
+            //    while (true)
+            //    {
+            //        string direction = Console.ReadLine();
+            //        if (directionRGX.Match(direction).Success)
+            //        {
 
-                        command = command.Replace(@"\s*", "").ToLower();
-                        direction = direction.Replace(@"\s*", "").ToLower();
+            //            command = command.Replace(@"\s*", "").ToLower();
+            //            direction = direction.Replace(@"\s*", "").ToLower();
 
-                        command = whitespace.Replace(command, "").ToLower();
-                        direction = whitespace.Replace(direction, "").ToLower();
+            //            command = whitespace.Replace(command, "").ToLower();
+            //            direction = whitespace.Replace(direction, "").ToLower();
 
-                        return command + direction;
-                    }
+            //            return command + direction;
+            //        }
 
 
-                    Console.SetCursorPosition(0, 32);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, 32);
-                    Console.Write("Ughh, can you repeat the directions?: ");
-                }
-            }
+            //        Console.SetCursorPosition(0, 32);
+            //        Console.Write(new string(' ', Console.WindowWidth));
+            //        Console.SetCursorPosition(0, 32);
+            //        Console.Write("Ughh, can you repeat the directions?: ");
+            //    }
+            //}
 
             Console.SetCursorPosition(0, 31);
             Console.Write(new string(' ', Console.WindowWidth));
