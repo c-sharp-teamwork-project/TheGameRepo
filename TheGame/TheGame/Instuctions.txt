@@ -13,6 +13,6 @@ Instuctions:
 [a-j] - row;  [0-9] - col;
 
  7) Successful hits are marked by "X"  
- 8) Misses are marked by "O".
+ 8) Misses are marked by "$".
  9) Destroyed ships are listed.
  9) Win by sinking all enemy ships.

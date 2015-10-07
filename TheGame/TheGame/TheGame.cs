@@ -80,7 +80,7 @@ class TheGame
             PrintMatrix(player.Board, player.name);
             Console.ForegroundColor = ENEMY;
             //if its ai.Board and not emtpyPlayer.Board its for printing the AI board once for easier testing of end-game phase etc.
-            PrintAIMatrix(ai.Board, emptyPlayer.name);
+            PrintAIMatrix(emptyPlayer.Board, emptyPlayer.name);
             Console.ResetColor();
         }
 
@@ -163,7 +163,7 @@ class TheGame
                 Thread.Sleep(1000);
             }
             //reprint the console
-            PrintScreen(player, ai);
+            PrintScreen(player, emptyPlayer);
         }
     }
     static void DestroyedShipsByPlayer(List<Battleship> destroyedShips, string name)
