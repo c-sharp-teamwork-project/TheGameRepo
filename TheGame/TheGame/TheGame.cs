@@ -24,8 +24,7 @@ class TheGame
         List<Battleship> destroyedEnemyShips = new List<Battleship>();
         List<Battleship> destroyedPlayerShips = new List<Battleship>();
 
-        List<Battleship> aiShipsToRemove = new List<Battleship>();
-        List<Battleship> playerShipsToRemove = new List<Battleship>();
+       
 
         List<string> destroyedShips = new List<string>();
         const ConsoleColor ENEMY = ConsoleColor.Red;
