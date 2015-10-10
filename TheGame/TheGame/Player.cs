@@ -23,10 +23,17 @@ namespace GameClasses
                                };
 
         public int shipsLeft;
+        public List<Battleship> ships = new List<Battleship>();
 
         public Player(string name)
         {
             this.name = name;
+        }
+
+        public List<Battleship> Ships
+        {
+            get { return ships; }
+            set { ships = value; }
         }
 
         public string Name

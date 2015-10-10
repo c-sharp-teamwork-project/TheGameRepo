@@ -11,7 +11,6 @@ namespace GameClasses
         public int size;
         public char orientation;
         public int health;
-        //added a specific character for each ship
         public char signature;
 
         public Battleship(string rank, int x, int y, int size, char orientation, char signature)
